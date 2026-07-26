@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurumi DL - FAQ & Live Rate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> KEMBALI KE HOME</a>
+
+        <div class="downloader-box" style="margin-bottom: 16px;">
+            <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 14px; border-bottom: 2px solid #09090b; padding-bottom: 8px;">
+                <i class="fa-solid fa-star" style="color: var(--yellow);"></i> BERIKAN ULASAN ANDA
+            </h2>
+            <form onsubmit="submitReview(event)">
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Nama Anda</label>
+                    <input type="text" id="revName" required class="input-neo" placeholder="Contoh: Bahrul Xyzet" style="margin-bottom: 0;">
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Beri Rating Bintang</label>
+                    <div id="starPicker" style="font-size: 22px; color: #cbd5e1; display: flex; gap: 6px; cursor: pointer;">
+                        <i class="fa-solid fa-star" style="color: var(--yellow);" onclick="setStars(1)"></i>
+                        <i class="fa-solid fa-star" style="color: var(--yellow);" onclick="setStars(2)"></i>
+                        <i class="fa-solid fa-star" style="color: var(--yellow);" onclick="setStars(3)"></i>
+                        <i class="fa-solid fa-star" style="color: var(--yellow);" onclick="setStars(4)"></i>
+                        <i class="fa-solid fa-star" style="color: var(--yellow);" onclick="setStars(5)"></i>
+                    </div>
+                    <input type="hidden" id="revStars" value="5">
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 4px;">Komentar</label>
+                    <textarea id="revText" required class="input-neo" placeholder="Ulasan kamu..." rows="2" style="margin-bottom: 0; resize: none;"></textarea>
+                </div>
+
+                <button type="submit" id="btn-submit-rev" class="btn-neo-action" style="background: var(--yellow);">
+                    KIRIM ULASAN REAL-TIME
+                </button>
+            </form>
+        </div>
+
+        <div class="downloader-box">
+            <h2 style="font-size: 16px; font-weight: 800; margin-bottom: 14px; border-bottom: 2px solid #09090b; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                ULASAN PENGGUNA <span style="font-size: 10px; background: var(--green); padding: 2px 8px; border-radius: 99px; border: 2px solid #09090b;">LIVE</span>
+            </h2>
+            <div id="liveReviewsContainer">
+                <p style="text-align: center; font-size: 12px; color: #64748b; padding: 20px;">Memuat ulasan asli...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStars = 5;
+        function setStars(count) {
+            currentStars = count;
+            document.getElementById('revStars').value = count;
+            const stars = document.getElementById('starPicker').children;
+            for (let i = 0; i < 5; i++) {
+                stars[i].style.color = (i < count) ? '#facc15' : '#cbd5e1';
+            }
+        }
+
+        async function loadReviews() {
+            const container = document.getElementById('liveReviewsContainer');
+            try {
+                const res = await fetch('/api/reviews');
+                const data = await res.json();
+                
+                container.innerHTML = '';
+                if (!data.reviews || data.reviews.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; font-size: 12px; color: #64748b; padding: 20px;">Belum ada ulasan.</p>';
+                    return;
+                }
+
+                data.reviews.reverse().forEach(rev => {
+                    const starsStr = '<i class="fa-solid fa-star" style="color: var(--yellow); font-size: 10px;"></i>'.repeat(rev.stars) + 
+                                     '<i class="fa-solid fa-star" style="color: #cbd5e1; font-size: 10px;"></i>'.repeat(5 - rev.stars);
+                    
+                    container.innerHTML += `
+                        <div style="background: #f8fafc; border: 2px solid #09090b; border-radius: 12px; padding: 12px; margin-bottom: 10px; box-shadow: 2px 2px 0px #09090b;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span style="font-weight: 800; font-size: 12px;"><i class="fa-solid fa-user-circle"></i> ${rev.name}</span>
+                                <div>${starsStr}</div>
+                            </div>
+                            <p style="font-size: 11px; color: #334155; line-height: 1.4;">"${rev.text}"</p>
+                            <span style="font-size: 9px; color: #94a3b8; display: block; margin-top: 6px; text-align: right;">${rev.date}</span>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                container.innerHTML = '<p style="text-align: center; font-size: 12px; color: red; padding: 20px;">Gagal memuat ulasan.</p>';
+            }
+        }
+
+        async function submitReview(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-rev');
+            btn.innerText = 'MENGIRIM...';
+            btn.disabled = true;
+
+            const payload = {
+                name: document.getElementById('revName').value,
+                stars: currentStars,
+                text: document.getElementById('revText').value,
+                date: new Date().toLocaleString('id-ID')
+            };
+
+            try {
+                await fetch('/api/reviews', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                document.getElementById('revName').value = '';
+                document.getElementById('revText').value = '';
+                setStars(5);
+                loadReviews();
+            } catch (err) {
+                alert('Gagal mengirim ulasan.');
+            } finally {
+                btn.innerText = 'KIRIM ULASAN REAL-TIME';
+                btn.disabled = false;
+            }
+        }
+
+        loadReviews();
+    </script>
+</body>
+</html>
+

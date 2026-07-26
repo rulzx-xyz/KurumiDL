@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurumi DL - Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> KEMBALI KE HOME</a>
+        
+        <div class="downloader-box">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <div id="platform-icon" class="feature-icon fi-red" style="font-size: 20px; width:45px; height:45px;"><i class="fa-solid fa-download"></i></div>
+                <h2 id="platform-title" style="font-size: 18px; font-weight: 800;">Downloader</h2>
+            </div>
+
+            <input type="url" id="urlInput" class="input-neo" placeholder="Tempel tautan video di sini...">
+            <button class="btn-neo-action" id="btn-process" onclick="runScrape()">
+                <i class="fa-solid fa-cloud-arrow-down"></i> PROSES DOWNLOAD
+            </button>
+
+            <div id="loading-box" class="hide" style="text-align: center; margin-top: 20px; font-weight: 700; font-size: 13px;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--kurumi-red); margin-bottom: 8px;"></i>
+                <p>Mengekstrak data media...</p>
+            </div>
+
+            <div id="result-box" class="hide" style="margin-top: 20px; border-top: 2px dashed #cbd5e1; padding-top: 16px;">
+                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+                    <img id="res-thumb" src="" alt="Thumb" style="width: 70px; height: 70px; object-fit: cover; border: 2px solid #09090b; border-radius: 8px;">
+                    <div id="res-title" style="font-size: 12px; font-weight: 700; line-height: 1.4;">Judul Video</div>
+                </div>
+                <a id="res-download-btn" href="#" target="_blank" class="btn-neo-action" style="background: var(--green); text-decoration: none; text-align: center;">
+                    <i class="fa-solid fa-download"></i> UNDUH FILE SEKARANG
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const p = urlParams.get('p') || 'tiktok';
+
+        const config = {
+            tiktok: { title: 'TikTok Downloader', icon: 'fa-brands fa-tiktok', endpoint: 'tiktok' },
+            ig: { title: 'Instagram Downloader', icon: 'fa-brands fa-instagram', endpoint: 'ig' },
+            yt: { title: 'YouTube Downloader', icon: 'fa-brands fa-youtube', endpoint: 'yt' }
+        };
+
+        document.getElementById('platform-title').innerText = config[p].title;
+        document.getElementById('platform-icon').innerHTML = `<i class="${config[p].icon}"></i>`;
+
+        function runScrape() {
+            executeDownload(config[p].endpoint, 'urlInput', 'loading-box', 'result-box', 'res-title', 'res-thumb', 'res-download-btn');
+        }
+    </script>
+</body>
+</html>
+
