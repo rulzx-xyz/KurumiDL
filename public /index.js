@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurumi DL - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="neo-card-dark">
+            <div class="pill-nav">
+                <a href="index.html" class="pill-btn active">HOME</a>
+                <a href="faq.html" class="pill-btn">FAQ & RATE</a>
+            </div>
+
+            <div class="profile-img-box">
+                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60" alt="Kurumi Tokisaki Theme">
+            </div>
+
+            <h1 class="profile-title">Kurumi DL</h1>
+            <p class="profile-desc">Nightmare Downloader - Platform unduhan multimedia berkecepatan tinggi dengan nuansa Kurumi.</p>
+
+            <div class="platform-grid">
+                <a href="downloader.html?p=tiktok" class="platform-icon-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="downloader.html?p=ig" class="platform-icon-btn" style="background: #f472b6; color: white;" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="downloader.html?p=yt" class="platform-icon-btn" style="background: #ef4444; color: white;" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 2px solid #3f3f46; font-size: 12px;">
+                <div style="color: #4ade80; font-weight: 700;"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> ONLINE</div>
+                <div style="display: flex; gap: 8px;">
+                    <a href="faq.html" class="pill-btn" style="padding: 4px 10px; font-size: 11px;">S & K</a>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="section-heading">Keunggulan Sistem</h2>
+            <div class="features-grid" style="margin-top: 14px;">
+                <div class="feature-box">
+                    <div class="feature-icon fi-red"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="feature-title">KILAT</div>
+                    <div class="feature-desc">Proses ekstrak instan tanpa jeda lama.</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon fi-pink"><i class="fa-solid fa-ban"></i></div>
+                    <div class="feature-title">CLEAN</div>
+                    <div class="feature-desc">Unduh bersih tanpa watermark bawaan.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
